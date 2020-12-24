@@ -1,8 +1,11 @@
 package com.example.listviewmidterm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONArray;
@@ -12,13 +15,12 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 
-class ReadInfo extends AsyncTask<String,Integer,String> {
+class ReadInfo extends AsyncTask<String,Integer,String> implements AdapterView.OnItemClickListener{
 
         private final MainActivity activity;
 
-        private ArrayList<String> repos;
-        private ArrayList<String> owners;
-
+    Context context;
+      private ArrayList<Read> readArrayList =new ArrayList<>();
         private final ListView info;
 
         public ReadInfo(MainActivity mainActivity) {
@@ -29,28 +31,38 @@ class ReadInfo extends AsyncTask<String,Integer,String> {
         @Override
         protected void onPostExecute(String s) {
 
-            repos = new ArrayList();
-            owners = new ArrayList();
+
             try {
                 JSONArray jsonArray = new JSONArray(s);
                 for(int i =0; i<jsonArray.length();i++)
                 {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     String name = jsonObject.getString("name");
+                    String bracnh=jsonObject.getString("branches_url");
+                            String tree =jsonObject.getString("trees_url");
 
                     JSONObject ownerObject = jsonObject.getJSONObject("owner");
                     String full_name = ownerObject.getString("login");
+                    readArrayList.add(new Read(name,full_name,bracnh,tree));
 
-                    repos.add(name);
-                    owners.add(full_name);
                 }
 
-                ListViewAdapter adapter=new ListViewAdapter(activity, repos, owners);
+                ListViewAdapter adapter=new ListViewAdapter(activity,readArrayList );
                 info.setAdapter(adapter);
             } catch (JSONException exception) {
                 exception.printStackTrace();
             }
         }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+       // Log.d("click", "onItemClick: ");
+        Intent intent = new Intent(context,ReadDetail.class);
+        intent.putExtra("readDetails",readArrayList.get(i));
+        context.startActivity(intent);
+
+    }
+
 
         @Override
         protected String doInBackground(String... args) {
@@ -66,5 +78,6 @@ class ReadInfo extends AsyncTask<String,Integer,String> {
 
             return feedback;
         }
+
 
 }

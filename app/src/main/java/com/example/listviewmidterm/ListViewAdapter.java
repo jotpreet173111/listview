@@ -5,27 +5,37 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-class ListViewAdapter extends ArrayAdapter<String> {
+class ListViewAdapter extends BaseAdapter {
     private final Activity activity;
-    private final ArrayList<String> repositoryName;
-    private final ArrayList<String> ownerName;
+    ArrayList<Read> readArrayList;
 
-    public ListViewAdapter(Activity activity, ArrayList<String> repositoryName, ArrayList<String> ownerName) {
-        super(activity, 0);
+    public ListViewAdapter(Activity activity,  ArrayList<Read> readArrayList) {
+
         this.activity=activity;
-        this.repositoryName =repositoryName;
-        this.ownerName = ownerName;
+        this.readArrayList =readArrayList;
+
     }
 
     @Override
     public int getCount() {
-        return repositoryName.size();
+        return readArrayList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return readArrayList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
@@ -39,8 +49,8 @@ class ListViewAdapter extends ArrayAdapter<String> {
         TextView titleText = convertView.findViewById(R.id.repo);
         TextView subtitleText = convertView.findViewById(R.id.owner);
 
-        titleText.setText(repositoryName.get(position));
-        subtitleText.setText(ownerName.get(position));
+        titleText.setText(readArrayList.get(position).getName());
+        subtitleText.setText(readArrayList.get(position).getName());
 
         return convertView;
     };

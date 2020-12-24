@@ -14,12 +14,15 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#00ffff"
         android:textStyle="bold" />
-
     <TextView
         android:id="@+id/owner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#00ffff" />
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#00ffff"
+        android:textStyle="bold" />
+
 
 </LinearLayout>
 
